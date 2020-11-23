@@ -2,6 +2,31 @@
 
 using namespace std;
 
+template  <class T>
+class BST{
+public:
+  BST();
+  virtual ~BST();
+  void insert(T &value);
+  bool getRoot();
+  bool contains(int value);  //AKA search
+  bool deleteNode(T &value);   //T or F if the node was deleted
+
+  TreeNode<T>* getSuccessor(TreeNode<T>* d);
+  bool deleteRec();
+
+  TreeNode<T>* getMin();
+  TreeNode<T>* getMax();
+  bool isEmpty();
+  void printTree();
+  void recPrint(TreeNode<T> *d);
+  void fileTree();
+  void recFile(TreeNode<T> *d);
+
+private:
+  TreeNode<T> *root;
+};
+
 template <class T>
 BST<T>::BST() //default constructor
 {
