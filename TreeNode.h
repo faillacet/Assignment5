@@ -1,37 +1,44 @@
-#include <iostream>
+#ifndef TREENODE_H
+#define TREENODE_H
 
+#include <iostream>
 using namespace std;
 
 template <class T>
 class TreeNode
 {
-    public:
+public:
+    T* data;
+    int key;
+    TreeNode<T> *left;
+    TreeNode<T> *right;
 
-        T* data;
-        int key;
-        TreeNode<T> *left;
-        TreeNode<T> *right;
-
-        TreeNode()
-        {
-            data = T();
-            key = -1;
-            left = NULL;
-            right = NULL;
-        }
-
-        TreeNode(T* d, int k)
-        {
-            data = d;
-            key = k;
-            left = NULL;
-            right = NULL;
-        }
-
-        ~TreeNode()
-        {
-            delete left;
-            delete right;
-            delete data;
-        }
+    TreeNode();
+    TreeNode(T* d, int k);
+    ~TreeNode();
 };
+
+template <class T>
+TreeNode<T>::TreeNode() {
+    data = T();
+    key = -1;
+    left = NULL;
+    right = NULL;
+}
+
+template <class T>
+TreeNode<T>::TreeNode(T* d, int k) {
+    data = d;
+    key = k;
+    left = NULL;
+    right = NULL;
+}
+
+template <class T>
+TreeNode<T>::~TreeNode() {
+    delete left;
+    delete right;
+    delete data;
+}
+
+#endif

@@ -1,5 +1,7 @@
-#include "TreeNode.h"
+#ifndef BST_H
+#define BST_H
 
+#include "TreeNode.h"
 using namespace std;
 
 template  <class T>
@@ -43,6 +45,9 @@ BST<T>::~BST()
 template <class T>
 void BST<T>::printTree()
 {
+  if (isEmpty()) {        // I ADDED THIS, COULD CAUSE A PROBLEM NO IDEA
+    return;
+  }
   recPrint(root);
 }
 
@@ -144,14 +149,16 @@ void BST<T>::fileTree()
   recFile(root);
 }
 
-template <class T>
-void BST<T>::recFile(TreeNode<T> *node)
-{
-  if (node==NULL)
-    return;
-  else{
-    recFile(node->left);
-    file_ << node->key.printInfo() << endl;
-    recFile(node->right);
-  }
-}
+// template <class T>
+// void BST<T>::recFile(TreeNode<T> *node)
+// {
+//   if (node==NULL)
+//     return;
+//   else{
+//     recFile(node->left);
+//     file_ << node->key.printInfo() << endl;
+//     recFile(node->right);
+//   }
+// }
+
+#endif
