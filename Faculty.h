@@ -12,6 +12,10 @@ private:
     string level;
     string department;
 
+    int getID();
+    void setID(int id);
+    string printInfo();
+
 public:
     Faculty();
     ~Faculty();
