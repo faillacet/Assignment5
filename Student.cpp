@@ -17,26 +17,27 @@ Student::~Student() {
 
 }
 
-int Student::operator==(Student &temp) {
-    return temp.studentID;
+void Student::printInfo() {
+    cout << "Student ID: " << studentID << endl;
+    cout << "Advisor ID: " << advisorID << endl;
+    cout << "Name: " << name << endl;
+    cout << "GPA: " << GPA << endl;
+    cout << "Grade Level: " << level <<endl;
+    cout << "Major: " << major << endl << endl;
 }
 
-int Student::operator<(Student &temp) {
-    return temp.studentID;
+bool Student::operator < (Student &other) {
+    return (studentID < other.studentID);
 }
 
-int Student::operator>(Student &temp) {
-    return temp.studentID;
+bool Student::operator > (Student &other) {
+    return (studentID > other.studentID);
+}
+
+bool Student::operator == (Student &other) {
+    return (studentID == other.studentID);
 }
 
 int Student::getID(){
-  return sID;
-}
-
-void Student::setID(int id){
-  this->sID = sID;
-}
-
-string Student::printInfo(){
-  return "| ID: " + to_string(sID) + " | Name: " + n + " | Level: " + l + " | Major: " + m + " | GPA: " + to_string(g) + " | Advisor ID: " + to_string(aID) + " |";
+  return studentID;
 }

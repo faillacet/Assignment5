@@ -2,11 +2,11 @@
 #define STUDENT_H
 
 #include <iostream>
+#include <string>
 using namespace std;
 
 class Student {
 private:
-    int studentID;
     int advisorID;
     double GPA;
     string name;
@@ -14,12 +14,15 @@ private:
     string major;
 
 public:
+    int studentID;
     Student();  //defaults
     Student(int sID, int aID, double g, string n, string l, string m);  //all inputs
     ~Student();
-    int operator==(Student &temp);      //overload ==  to check for key
-    int operator<(Student &temp);
-    int operator>(Student &temp);
+    void printInfo();
+    bool operator < (Student &other);
+    bool operator > (Student &other);
+    bool operator == (Student &other);
+    int getID();
 };
 
 #endif

@@ -1,7 +1,8 @@
 #ifndef FACULTY_H
-#define FACULTY_h
+#define FACULTY_H
 
 #include <iostream>
+#include <string>
 using namespace std;
 
 class Faculty {
@@ -12,13 +13,15 @@ private:
     string level;
     string department;
 
-    int getID();
-    void setID(int id);
-    string printInfo();
-
 public:
     Faculty();
+    Faculty(int fID, int aID, string n, string l, string d);  //all inputs
     ~Faculty();
+    void printInfo();
+    bool operator < (Faculty &other);
+    bool operator > (Faculty &other);
+    bool operator == (Faculty &other);
+    int getID();
 };
 
 #endif

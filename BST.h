@@ -4,7 +4,7 @@
 #include "TreeNode.h"
 using namespace std;
 
-template  <class T>
+template <class T>
 class BST{
 public:
   BST();
@@ -45,9 +45,6 @@ BST<T>::~BST()
 template <class T>
 void BST<T>::printTree()
 {
-  if (isEmpty()) {        // I ADDED THIS, COULD CAUSE A PROBLEM NO IDEA
-    return;
-  }
   recPrint(root);
 }
 
@@ -58,7 +55,7 @@ void BST<T>::recPrint(TreeNode<T> *node)
     return;
   else{
     recPrint(node->left);
-    cout << node->key.printInfo() << endl;
+    node->printInfo();
     recPrint(node->right);
   }
 }

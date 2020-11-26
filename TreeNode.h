@@ -8,28 +8,29 @@ template <class T>
 class TreeNode
 {
 public:
-    T* data;
-    int key;
+    T data;
     TreeNode<T> *left;
     TreeNode<T> *right;
 
     TreeNode();
-    TreeNode(T* d, int k);
+    TreeNode(T &d);
     ~TreeNode();
+    void printInfo();   //print the data stored 
+    bool operator < (TreeNode<T> &other);
+    bool operator > (TreeNode<T> &other);
+    bool operator == (TreeNode<T> &other);
 };
 
 template <class T>
 TreeNode<T>::TreeNode() {
     data = T();
-    key = -1;
     left = NULL;
     right = NULL;
 }
 
 template <class T>
-TreeNode<T>::TreeNode(T* d, int k) {
+TreeNode<T>::TreeNode(T &d) {
     data = d;
-    key = k;
     left = NULL;
     right = NULL;
 }
@@ -39,6 +40,26 @@ TreeNode<T>::~TreeNode() {
     delete left;
     delete right;
     delete data;
+}
+
+template <class T>
+void TreeNode<T>::printInfo() {
+    data.printInfo();
+}
+
+template <class T>
+bool TreeNode<T>::operator < (TreeNode<T> &other) {
+    return (*data < other.data);
+}
+
+template <class T>
+bool TreeNode<T>::operator > (TreeNode<T> &other) {
+    return (*data > other.data);
+}
+
+template <class T>
+bool TreeNode<T>::operator == (TreeNode<T> &other) {
+    return (*data == other.data);
 }
 
 #endif

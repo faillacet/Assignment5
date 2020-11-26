@@ -1,20 +1,23 @@
-#include "Student.h"
-#include "Faculty.h"
-#include "BST.h"
 #ifndef HANDLER_H
 #define HANDLER_H
 
-class RunProgram{
-public:
-  void createTrees();
-  void printMenu();
-  void menuSelection(int menuSel);
-  void printAllStudents();
-  void printAllFaculty();
-  void printAdvisor();
-  void createStudentTableFile();
-  void createFacultyTableFile();
-  void facultyStudentID();
+#include <iostream>
+#include <fstream>
+#include <string>
+#include "Student.h"
+#include "Faculty.h"
+#include "BST.h"
+using namespace std;
 
+class Handler {
+private:
+
+public:
+    Handler();
+    ~Handler();
+    void filesExist();    //when program starts search for two stored files (BST) to see if they exist
+    bool readFile(ifstream &fileName);      //if the files exist, open them and push info to BST
+    void displayMenu();                     //menu for user input
 };
+
 #endif

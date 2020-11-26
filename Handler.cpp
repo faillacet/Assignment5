@@ -1,29 +1,55 @@
-#include "Student.h"
 #include "Handler.h"
-#include "Faculty.h"
-#include <iostream>
-#include <fstream>
 
-ofstream file_;
-int studID = 2;
-int facID = 1;
-int searchID;
-BST<Student> masterStudent;
-BST<Faculty> masterFaculty;
-Faculty f1();
-
-
-
-void RunProgram::createTrees(){
-  //test
-  Student s1();
-  Student s2();
-  masterStudent.insert(s1);
-  masterStudent.insert(s2);
-  masterFaculty.insert(f1);
+Handler::Handler() {
+    // Creates the needed BSTs
+    BST<Student> studentTree;
+    BST<Faculty> facultyTree;
 }
 
-void RunProgram::printMenu(){
+Handler::~Handler() {
+    //clean up 
+}
+
+void Handler::filesExist() {
+    // check to see if we can open "facultyTable" and "studentTable"
+    // only works if files exist in same directory as program
+    ifstream facultyTable("facultyTable");
+    ifstream studentTable("studentTable");
+	
+    if (facultyTable.is_open() && studentTable.is_open()) {     //case both files exist
+
+        readFile(facultyTable);
+        readFile(studentTable);
+
+        facultyTable.close();
+        studentTable.close();
+    }
+    else if (facultyTable.is_open()) {                          //case only faculty file exits
+
+        readFile(facultyTable);
+
+        facultyTable.close();
+    }
+    else if (studentTable.is_open()) {                          //case only student file exists
+
+        readFile(studentTable);
+        studentTable.close();
+    }
+}
+
+bool Handler::readFile(ifstream &fileName) {
+    if (fileName.is_open()) {
+        //code to push all the info to a BST
+        
+
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+void Handler::displayMenu(){
   cout << "~~~~~~~~~~~~~~~ MENU ~~~~~~~~~~~~~~~" << endl;
   cout << " 1) Print all students and their information (sorted by ascending id #)" << endl;
   cout << " 2) Print all faculty and their information (sorted by ascending id #)" << endl;
