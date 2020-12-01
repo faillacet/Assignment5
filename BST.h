@@ -12,7 +12,7 @@ public:
   void insert(T &value);
   bool getRoot();
   bool contains(int value);  //AKA search
-  bool deleteNode(T &value);   //T or F if the node was deleted
+  TreeNode<T>* deleteNode(int key);   //key is ID num
 
   TreeNode<T>* getSuccessor(TreeNode<T>* d);
   bool deleteRec();
@@ -22,8 +22,8 @@ public:
   bool isEmpty();
   void printTree();
   void recPrint(TreeNode<T> *d);
-  void fileTree();
-  void recFile(TreeNode<T> *d);
+  void pushTree(string input);
+  void recPush(TreeNode<T> *d, ofstream &myFile);
 
 private:
   TreeNode<T> *root;
@@ -57,6 +57,25 @@ void BST<T>::recPrint(TreeNode<T> *node)
     recPrint(node->left);
     node->printInfo();
     recPrint(node->right);
+  }
+}
+
+template <class T>
+void BST<T>::pushTree(string input) {
+  ofstream myFile(input);
+  recPush(root, myFile);
+  myFile.close();
+}
+
+template <class T>
+void BST<T>::recPush(TreeNode<T> *node, ofstream &myFile) {
+  if (node==NULL){
+    return;
+  }
+  else {
+    recPush(node->left, myFile);
+    node->pushToFile(myFile);
+    recPush(node->right, myFile);
   }
 }
 
@@ -138,24 +157,22 @@ bool BST<T>::contains(int value)
   return true;
 }
 
-
-
 template <class T>
-void BST<T>::fileTree()
-{
-  recFile(root);
-}
+TreeNode<T>* BST<T>::deleteNode(int key) { //key is student ID in this case
+  if (root==NULL) {
+    return root;
+  }
+  if (key < root->data) {
+    root->left = deleteNode(key);
+  }
+  else if (key > root->data) {
 
-// template <class T>
-// void BST<T>::recFile(TreeNode<T> *node)
-// {
-//   if (node==NULL)
-//     return;
-//   else{
-//     recFile(node->left);
-//     file_ << node->key.printInfo() << endl;
-//     recFile(node->right);
-//   }
-// }
+  }
+  else {
+
+  }
+
+  
+}
 
 #endif

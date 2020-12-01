@@ -8,18 +8,16 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-    BST<Student> test;
-
-    Student Trenton(1,1,1,"Trenton","Junior","Computer Science");       //TO keep it simple --- lets use name or ID (ID probably better)
+    Handler h;
+    
+    Student Trenton(1,2,1,"Trenton","Junior","Computer Science");       //TO keep it simple --- lets use name or ID (ID probably better)
     Student Other(3,3,3,"Other","Sophomore", "English");
     Student Ryan(2,2,2,"Ryan","Freshman", "Science");
-    test.insert(Trenton);
-    test.insert(Other);
-    test.insert(Ryan);
 
-    test.printTree();
-
-
+    h.insertStudent(Ryan);
+    h.insertStudent(Other);
+    h.insertStudent(Trenton);
+    h.displayStudentTree();
 
     return 0;
 }

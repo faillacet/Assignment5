@@ -26,6 +26,17 @@ void Student::printInfo() {
     cout << "Major: " << major << endl << endl;
 }
 
+void Student::pushToFile(ofstream &myFile) {
+    if (myFile.is_open()) {
+        myFile << studentID << endl;
+        myFile << advisorID << endl;
+        myFile << GPA << endl;
+        myFile << name << endl;
+        myFile << level << endl;
+        myFile << major << endl;
+    }
+}
+
 bool Student::operator < (Student &other) {
     return (studentID < other.studentID);
 }
@@ -40,4 +51,28 @@ bool Student::operator == (Student &other) {
 
 int Student::getID(){
   return studentID;
+}
+
+void Student::setID(int x) {
+    studentID = x;
+}
+
+void Student::setAID(int x) {
+    advisorID = x;
+}
+
+void Student::setGPA(double x) {
+    GPA = x;
+}
+
+void Student::setName(string x) {
+    name = x;
+}
+
+void Student::setLevel(string x) {
+    level = x;
+}
+
+void Student::setMajor(string x) {
+    major = x;
 }

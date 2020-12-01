@@ -1,29 +1,122 @@
-#include "Student.h"
 #include "Handler.h"
-#include "Faculty.h"
-#include <iostream>
-#include <fstream>
 
-ofstream file_;
-int studID = 2;
-int facID = 1;
-int searchID;
-BST<Student> masterStudent;
-BST<Faculty> masterFaculty;
-Faculty f1();
-
-
-
-void RunProgram::createTrees(){
-  //test
-  Student s1();
-  Student s2();
-  masterStudent.insert(s1);
-  masterStudent.insert(s2);
-  masterFaculty.insert(f1);
+Handler::Handler() {
+    // Creates the needed BSTs
 }
 
-void RunProgram::printMenu(){
+Handler::~Handler() {
+    //clean up  --- pushes state of all trees to files
+    facultyTree.pushTree("facultyTable");
+    studentTree.pushTree("studentTable");
+}
+
+void Handler::filesExist(BST<Faculty> &facultyTree) {
+    // check to see if we can open "facultyTable" and "studentTable"
+    // only works if files exist in same directory as program
+    ifstream facultyTable("facultyTable");
+    ifstream studentTable("studentTable");
+	
+    if (facultyTable.is_open() && studentTable.is_open()) {     //case both files exist
+
+        readFileFaculty(facultyTable);
+        readFileStudent(studentTable);
+
+        facultyTable.close();
+        studentTable.close();
+    }
+    else if (facultyTable.is_open()) {                          //case only faculty file exits
+
+        readFileFaculty(facultyTable);
+
+        facultyTable.close();
+    }
+    else if (studentTable.is_open()) {                          //case only student file exists
+
+        readFileStudent(studentTable);
+        studentTable.close();
+    }
+}
+
+bool Handler::readFileFaculty(ifstream &fileName) {             
+    string x;
+    int linecount = 1;
+    Faculty temp;
+    while (getline(fileName,x)) {
+        //Organized ID, adviseeID, Name, Level, Department
+        if (linecount%5 == 1) {
+            temp.setID(stoi(x));
+        }
+        else if (linecount%5 == 2) {
+            temp.setAID(stoi(x));
+        }
+        else if (linecount%5 == 3) {
+            temp.setName(x);
+        }
+        else if (linecount%5 == 4) {
+            temp.setLevel(x);
+        }
+        else if (linecount%5 == 0) {
+            temp.setDepartment(x);
+        }
+        if (linecount%5 == 0) {
+            //push entire object to BST
+            facultyTree.insert(temp);
+        }
+        linecount++;
+    }           
+    return true;
+}
+
+bool Handler::readFileStudent(ifstream &fileName) {
+    string x;
+    int linecount = 1;
+    Student temp;
+    while (getline(fileName,x)) {
+        //Organized ID, adviserID, GPA, Name, Level, Major
+        if (linecount%6 == 1) {
+            temp.setID(stoi(x));
+        }
+        else if (linecount%6 == 2) {
+            temp.setAID(stoi(x));
+        }
+        else if (linecount%6 == 3) {
+            temp.setGPA(stoi(x));
+        }
+        else if (linecount%6 == 4) {
+            temp.setName(x);
+        }
+        else if (linecount%6 == 5) {
+            temp.setLevel(x);
+        }
+        else if (linecount%6 == 0) {
+            temp.setMajor(x);
+        }
+        if (linecount%5 == 0) {
+            //push entire object to BST
+            studentTree.insert(temp);
+        }
+        linecount++;
+    }           
+    return true;
+}
+
+void Handler::insertFaculty(Faculty x) {
+    facultyTree.insert(x);
+}
+
+void Handler::insertStudent(Student x) {
+    studentTree.insert(x);
+}
+
+void Handler::displayFacultyTree() {
+    facultyTree.printTree();
+}
+
+void Handler::displayStudentTree() {
+    studentTree.printTree();
+}
+
+void Handler::displayMenu(){
   cout << "~~~~~~~~~~~~~~~ MENU ~~~~~~~~~~~~~~~" << endl;
   cout << " 1) Print all students and their information (sorted by ascending id #)" << endl;
   cout << " 2) Print all faculty and their information (sorted by ascending id #)" << endl;
@@ -39,115 +132,4 @@ void RunProgram::printMenu(){
   cout << " 12) Remove an advisee from a faculty member given the ids" << endl;
   cout << " 13) Rollback" << endl;
   cout << " 14) Exit" << endl;
-}
-
-void RunProgram::menuSelection(int menuSel){
-  Student newStudent;
-  Faculty newFac;
-  switch(menuSel){
-    case 1: //print all students
-      printAllStudents();
-      break;
-    case 2: //print all faculty
-      printAllFaculty();
-      break;
-    case 3: //print a student's info
-      cout << "Enter the Student ID: " << endl;
-      cin >> searchID;
-      masterStudent.contains(searchID);
-      break;
-    case 4: //print a faculty's info
-      cout << "Enter the Faculty ID: " << endl;
-      cin >> searchID;
-      masterFaculty.contains(searchID);
-      break;
-    case 5: //print a faculty's info from student id
-      cout << "Enter the Student ID: " << endl;
-      break;
-    case 6: //print all advisee's info for a faculty
-      cout << "Enter the Faculty ID: " << endl;
-      break;
-    case 7: //add student
-      studID++;
-      newStudent.setID(studentID);
-      cout << "Enter Student Name: " << endl;
-      cin.ignore(); //https://www.tutorialspoint.com/what-is-the-use-of-cin-ignore-in-cplusplus
-      getline(cin,newStudent.name);
-      cout << "Enter Student Level: " << endl;
-      cin >> newStudent.level;
-      cout << "Enter Student Major: " << endl;
-      cin.ignore();
-      getline(cin,newStudent.major);
-      cout << "Enter Student GPA: " << endl;
-      cin >> newStudent.gpa;
-      masterStudent.insert(newStudent);
-      break;
-    case 8: //delete student
-      cout << "Enter the Student ID: " << endl;
-
-      break;
-    case 9: //add faculty
-      facID++;
-      newFac.setID(facultyID);
-      cout << "Enter Faculty Name: " << endl;
-      cin.ignore();
-      getline(cin,newFac.name);
-      cout << "Enter Faculty Level: " << endl;
-      cin.ignore();
-      getline(cin,newFac.level);
-      cout << "Enter Faculty Department: " << endl;
-      cin.ignore();
-      getline(cin,newFac.department);
-      masterFaculty.insert(newFac);
-      break;
-    case 10: //delete faculty
-      cout << "Enter the Faculty ID: " << endl;
-      break;
-    case 11: //change student's advisor
-      cout << "Enter the Student ID: " << endl;
-      cout << "Enter the new Faculty ID: " << endl;
-      break;
-    case 12: //remove student from faculty's advisee  list
-      cout << "Enter the Student ID: " << endl;
-      cout << "Enter the new Faculty ID: " << endl;
-      break;
-    case 13: //Rollback
-      break;
-    case 14:
-      createStudentTableFile();
-      createFacultyTableFile();
-      break;
-  }
-}
-
-void RunProgram::printAllStudents(){
-  if(masterStudent.isEmpty())
-    cout << "No Students exist at this time." << endl;
-  else{
-    //write function to print out entire tree
-  }
-}
-
-void RunProgram::printAllFaculty(){
-  if(masterFaculty.isEmpty())
-    cout << "No Faculty exist at this time." << endl;
-  else{
-    //write function to print out entire tree
-  }
-}
-
-void RunProgram::createStudentTableFile(){
-  if(masterStudent.isEmpty())
-    cout << "No Students exist at this time." << endl;
-  else{
-    //file open
-  }
-}
-
-void RunProgram::createFacultyTableFile(){
-  if(masterFaculty.isEmpty())
-    cout << "No Students exist at this time." << endl;
-  else{
-    //file open
-  }
 }

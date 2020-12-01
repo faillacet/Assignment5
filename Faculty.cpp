@@ -29,6 +29,16 @@ void Faculty::printInfo() {
     cout << "Department: " << department <<endl << endl;
 }
 
+void Faculty::pushToFile(ofstream &myFile) {
+    if (myFile.is_open()) {
+        myFile << facultyID << endl;
+        myFile << adviseesID << endl;
+        myFile << name << endl;
+        myFile << level << endl;
+        myFile << department << endl;
+    }
+}
+
 bool Faculty::operator < (Faculty &other) {
     return (facultyID < other.facultyID);
 }
@@ -43,4 +53,24 @@ bool Faculty::operator == (Faculty &other) {
 
 int Faculty::getID() {
     return facultyID;
+}
+
+void Faculty::setID(int x) {
+    facultyID = x;
+}
+
+void Faculty::setAID(int x) {
+    adviseesID = x;
+}
+
+void Faculty::setName(string x) {
+    name = x;
+}
+
+void Faculty::setLevel(string x) {
+    level = x;
+}  
+
+void Faculty::setDepartment(string x) {
+    department = x;
 }
