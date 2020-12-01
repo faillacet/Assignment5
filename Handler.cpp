@@ -1,55 +1,29 @@
+#include "Student.h"
 #include "Handler.h"
+#include "Faculty.h"
+#include <iostream>
+#include <fstream>
 
-Handler::Handler() {
-    // Creates the needed BSTs
-    BST<Student> studentTree;
-    BST<Faculty> facultyTree;
+ofstream file_;
+int studID = 2;
+int facID = 1;
+int searchID;
+BST<Student> masterStudent;
+BST<Faculty> masterFaculty;
+Faculty f1();
+
+
+
+void RunProgram::createTrees(){
+  //test
+  Student s1();
+  Student s2();
+  masterStudent.insert(s1);
+  masterStudent.insert(s2);
+  masterFaculty.insert(f1);
 }
 
-Handler::~Handler() {
-    //clean up 
-}
-
-void Handler::filesExist() {
-    // check to see if we can open "facultyTable" and "studentTable"
-    // only works if files exist in same directory as program
-    ifstream facultyTable("facultyTable");
-    ifstream studentTable("studentTable");
-	
-    if (facultyTable.is_open() && studentTable.is_open()) {     //case both files exist
-
-        readFile(facultyTable);
-        readFile(studentTable);
-
-        facultyTable.close();
-        studentTable.close();
-    }
-    else if (facultyTable.is_open()) {                          //case only faculty file exits
-
-        readFile(facultyTable);
-
-        facultyTable.close();
-    }
-    else if (studentTable.is_open()) {                          //case only student file exists
-
-        readFile(studentTable);
-        studentTable.close();
-    }
-}
-
-bool Handler::readFile(ifstream &fileName) {
-    if (fileName.is_open()) {
-        //code to push all the info to a BST
-        
-
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-void Handler::displayMenu(){
+void RunProgram::printMenu(){
   cout << "~~~~~~~~~~~~~~~ MENU ~~~~~~~~~~~~~~~" << endl;
   cout << " 1) Print all students and their information (sorted by ascending id #)" << endl;
   cout << " 2) Print all faculty and their information (sorted by ascending id #)" << endl;
@@ -65,4 +39,115 @@ void Handler::displayMenu(){
   cout << " 12) Remove an advisee from a faculty member given the ids" << endl;
   cout << " 13) Rollback" << endl;
   cout << " 14) Exit" << endl;
+}
+
+void RunProgram::menuSelection(int menuSel){
+  Student newStudent;
+  Faculty newFac;
+  switch(menuSel){
+    case 1: //print all students
+      printAllStudents();
+      break;
+    case 2: //print all faculty
+      printAllFaculty();
+      break;
+    case 3: //print a student's info
+      cout << "Enter the Student ID: " << endl;
+      cin >> searchID;
+      masterStudent.contains(searchID);
+      break;
+    case 4: //print a faculty's info
+      cout << "Enter the Faculty ID: " << endl;
+      cin >> searchID;
+      masterFaculty.contains(searchID);
+      break;
+    case 5: //print a faculty's info from student id
+      cout << "Enter the Student ID: " << endl;
+      break;
+    case 6: //print all advisee's info for a faculty
+      cout << "Enter the Faculty ID: " << endl;
+      break;
+    case 7: //add student
+      studID++;
+      newStudent.setID(studentID);
+      cout << "Enter Student Name: " << endl;
+      cin.ignore(); //https://www.tutorialspoint.com/what-is-the-use-of-cin-ignore-in-cplusplus
+      getline(cin,newStudent.name);
+      cout << "Enter Student Level: " << endl;
+      cin >> newStudent.level;
+      cout << "Enter Student Major: " << endl;
+      cin.ignore();
+      getline(cin,newStudent.major);
+      cout << "Enter Student GPA: " << endl;
+      cin >> newStudent.gpa;
+      masterStudent.insert(newStudent);
+      break;
+    case 8: //delete student
+      cout << "Enter the Student ID: " << endl;
+
+      break;
+    case 9: //add faculty
+      facID++;
+      newFac.setID(facultyID);
+      cout << "Enter Faculty Name: " << endl;
+      cin.ignore();
+      getline(cin,newFac.name);
+      cout << "Enter Faculty Level: " << endl;
+      cin.ignore();
+      getline(cin,newFac.level);
+      cout << "Enter Faculty Department: " << endl;
+      cin.ignore();
+      getline(cin,newFac.department);
+      masterFaculty.insert(newFac);
+      break;
+    case 10: //delete faculty
+      cout << "Enter the Faculty ID: " << endl;
+      break;
+    case 11: //change student's advisor
+      cout << "Enter the Student ID: " << endl;
+      cout << "Enter the new Faculty ID: " << endl;
+      break;
+    case 12: //remove student from faculty's advisee  list
+      cout << "Enter the Student ID: " << endl;
+      cout << "Enter the new Faculty ID: " << endl;
+      break;
+    case 13: //Rollback
+      break;
+    case 14:
+      createStudentTableFile();
+      createFacultyTableFile();
+      break;
+  }
+}
+
+void RunProgram::printAllStudents(){
+  if(masterStudent.isEmpty())
+    cout << "No Students exist at this time." << endl;
+  else{
+    //write function to print out entire tree
+  }
+}
+
+void RunProgram::printAllFaculty(){
+  if(masterFaculty.isEmpty())
+    cout << "No Faculty exist at this time." << endl;
+  else{
+    //write function to print out entire tree
+  }
+}
+
+void RunProgram::createStudentTableFile(){
+  if(masterStudent.isEmpty())
+    cout << "No Students exist at this time." << endl;
+  else{
+    //file open
+  }
+}
+
+void RunProgram::createFacultyTableFile(){
+  if(masterFaculty.isEmpty())
+    cout << "No Students exist at this time." << endl;
+  else{
+    //file open
+  }
 }
