@@ -242,3 +242,28 @@ bool BST<T>::removeNode(int k){
             successor->left = current->left;
         }
 }
+
+TreeNode* BST::getSuccessor(TreeNode *d)
+{
+
+  TreeNode *sp = d;
+  TreeNode *successor = d;
+  TreeNode *current = d->right;
+
+  while(current != NULL){
+
+    sp = successor;
+    successor = current;
+    current = current->left;
+
+  }
+
+  if(successor != d->right){
+    sp->left = successor->right;
+    successor->right = d->right;
+  }
+  return successor;
+
+}
+
+#endif
