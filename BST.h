@@ -13,6 +13,8 @@ public:
   bool getRoot();
   void contains(T &value);  //AKA search
   bool removeNode(T &key);   //key is ID num
+  bool deleteNode(T &key);
+  TreeNode<T>* minimumKey(TreeNode<T>* curr);
   TreeNode<T>* getSuccessor(TreeNode<T>* d);
 
   TreeNode<T>* getMin();
@@ -183,7 +185,7 @@ TreeNode<T>* BST<T>::getSuccessor(TreeNode<T> *d) {
 
 template <class T>
 bool BST<T>::removeNode(T &key) {
-  if(isEmpty()) { //root == NULL
+  if (isEmpty()) { //root == NULL
     return false;
   }
   //invoke search to determine where exist or not
@@ -260,6 +262,65 @@ bool BST<T>::removeNode(T &key) {
   }
 }
 
+template <class T>
+TreeNode<T>* BST<T>::minimumKey(TreeNode<T> *curr) {
+  while (curr->left != nullptr) {
+    curr = curr->left;
+  }
+  return curr;
+}
 
+template <class T>
+bool BST<T>::deleteNode(T &key) {
+  TreeNode<T> *parent = nullptr;
+  TreeNode<T> *curr = root;
+  while (curr != nullptr && curr->data != key) {
+    parent = curr;
+    if (key < curr->data) {
+      curr = curr->left;
+    }
+    else {
+      curr = curr->right;
+    }
+  }
+  if (curr == nullptr) {  //node not found in tree
+    return false;
+  }
+  if (curr->left == nullptr && curr->right == nullptr) { //case no children
+    if (curr != root) {
+      if (parent->left == curr) {
+        parent->left = nullptr;
+      }
+      else {
+        parent->right = nullptr;
+      }
+    }
+    else {
+      root = nullptr;
+    }
+    free(curr);
+  }
+  else if (curr->left && curr->right) { // case two children
+    TreeNode<T> *successor = minimumKey(curr->right);
+    T val = successor->data;
+    deleteNode(successor->data);
+    curr->data = val;
+  }
+  else {  //case node has only one child
+    TreeNode<T> *child = (curr->left)? curr->left: curr->right;
+    if (curr != root) {
+      if (curr == parent->left) {
+        parent->left = child;
+      }
+      else {
+        parent->right = child;
+      }
+    }
+    else {
+      root = child;
+      free (curr);
+    }
+  }
+}
 
 #endif

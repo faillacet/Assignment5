@@ -182,7 +182,14 @@ void Handler::deleteFaculty(int id) {
 }
 
 void Handler::deleteStudent(int id) {
+    bool result;
     Student temp;
     temp.setID(id);
-    studentTree.removeNode(temp);
+    result = studentTree.deleteNode(temp);
+    if (result == true) {
+        cout << "Student with ID " << id << " sucessfully delted."  <<endl;
+    }
+    else {
+        cout << "Could not delete Student!" << endl;
+    }
 }

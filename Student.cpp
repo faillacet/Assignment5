@@ -1,7 +1,13 @@
 #include "Student.h"
 
 Student::Student() {
-
+    //defaults
+    studentID = 0;
+    advisorID = 0;
+    GPA = 0;
+    name = "Default";
+    level = "Default";
+    major = "Default";
 }
 
 Student::Student(int sID, int aID, double g, string n, string l, string m) {
