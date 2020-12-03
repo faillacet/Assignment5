@@ -101,6 +101,38 @@ bool Handler::readFileStudent(ifstream &fileName) {
     return true;
 }
 
+void Handler::createNewFaculty() {
+    Faculty temp;
+
+}
+
+void Handler::createNewStudent() {
+    Student temp;
+    int x;
+    double y;
+    string z;
+    cout << "Enter New Student ID: " << endl;
+    cin >> x;
+    temp.setID(x);
+    cout << "Enter New Student's Advisor ID: " << endl;
+    cin >> x;
+    temp.setAID(x);
+    cout << "Enter New Student GPA: " << endl;
+    cin >> y;
+    temp.setGPA(y);
+    cout << "Enter New Student Name: " << endl;
+    cin >> z;
+    temp.setName(z);
+    cout << "Enter New Student Grade Level: " << endl;
+    cin >> z;
+    temp.setLevel(z);
+    cout << "Enter New Student Major: " << endl;
+    cin >> z;
+    temp.setMajor(z);
+
+    insertStudent(temp);
+}
+
 void Handler::insertFaculty(Faculty x) {
     facultyTree.insert(x);
 }
@@ -143,4 +175,14 @@ void Handler::displayStudent(int id) {
     Student temp;
     temp.setID(id);
     studentTree.contains(temp);
+}
+
+void Handler::deleteFaculty(int id) {
+
+}
+
+void Handler::deleteStudent(int id) {
+    Student temp;
+    temp.setID(id);
+    studentTree.removeNode(temp);
 }

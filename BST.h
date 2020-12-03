@@ -12,10 +12,8 @@ public:
   void insert(T &value);
   bool getRoot();
   void contains(T &value);  //AKA search
-  TreeNode<T>* deleteNode(int key);   //key is ID num
-
+  bool removeNode(T &key);   //key is ID num
   TreeNode<T>* getSuccessor(TreeNode<T>* d);
-  bool deleteRec();
 
   TreeNode<T>* getMin();
   TreeNode<T>* getMax();
@@ -98,7 +96,6 @@ void BST<T>::insert(T &value)
   {
     TreeNode<T> *current = root;
     TreeNode<T> *parent;   //empty node
-
     while(true)
     {
       parent = current;
@@ -118,7 +115,7 @@ void BST<T>::insert(T &value)
       {
         current = current->right;
 
-        if(current==NULL)
+        if (current==NULL)
         {
           parent->right = node;
           break;
@@ -168,21 +165,101 @@ void BST<T>::contains(T &value) {
 }
 
 template <class T>
-TreeNode<T>* BST<T>::deleteNode(int key) { //key is student ID in this case
-  if (root==NULL) {
-    return root;
+TreeNode<T>* BST<T>::getSuccessor(TreeNode<T> *d) {
+  TreeNode<T> *sp = d;
+  TreeNode<T> *successor = d;
+  TreeNode<T> *current = d->right;
+  while (current != NULL){
+    sp = successor;
+    successor = current;
+    current = current->left;
   }
-  if (key < root->data) {
-    root->left = deleteNode(key);
+  if (successor != d->right){
+    sp->left = successor->right;
+    successor->right = d->right;
   }
-  else if (key > root->data) {
-
-  }
-  else {
-
-  }
-
-  
+  return successor;
 }
+
+template <class T>
+bool BST<T>::removeNode(T &key) {
+  if(isEmpty()) { //root == NULL
+    return false;
+  }
+  //invoke search to determine where exist or not
+  TreeNode<T> *parent = nullptr;
+  TreeNode<T> *current = root;
+  bool isLeftNode = true;
+  while (key != current->data) {
+    parent = current;
+    if (key < current->data) {
+      isLeftNode = true;
+      current = current->left;
+    }
+    else{
+      isLeftNode = false;
+      current = current->right;
+    }
+    if (current == NULL) {
+        return false;
+    }
+    //at this point we have found our key/value, now we can proceed to deleting this node
+    //case: node to be deleted does not have children, AKA a leaf node
+    if (current->left == nullptr && current->right == nullptr) {
+      if (current == root) {
+        root = NULL;
+      }
+      else if (isLeftNode) {
+        parent->left = nullptr;
+      }
+      else {
+        parent->right = nullptr;
+      }
+    }
+    else if (current->right == nullptr) { //case: node to be deleted has 1 child, need to determine which side node is on
+      //does not have a right children, must have left child
+      if (current == root) {
+        root = current->left;
+      }
+      else if (isLeftNode) {
+        parent->left = current->left;
+      }
+      else {
+          //node to be deleted is a right child
+        parent->right = current->left;
+      }
+    }
+    else if (current->left == nullptr) { //case: node to be deleted has 1 child, need to determine which side node is on
+      //does not have a right children, must have left child
+      if (current == root) {
+        root = current->right;
+      }
+      else if (isLeftNode) {
+        parent->left = current->right;
+      }
+      else {
+        //node to be deleted is a right child
+        parent->right = current->right;
+      }
+    }
+    else {
+      //the node to be deleted has two children, at this point we begin to cry
+      //we have to find the successor
+      TreeNode<T> *successor = getSuccessor(current);
+      if (current == root) {
+        root = successor;
+      }
+      else if (isLeftNode) {
+        parent->left = successor;
+      }
+      else {
+        parent->right = successor;
+      }
+      successor->left = current->left;
+    }
+  }
+}
+
+
 
 #endif
