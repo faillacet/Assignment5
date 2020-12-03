@@ -12,7 +12,7 @@ public:
   void insert(T &value);
   bool getRoot();
   bool contains(int value);  //AKA search
-  bool deleteNode(T &value);   //T or F if the node was deleted
+  bool removeNode(T &value);   //T or F if the node was deleted
 
   TreeNode<T>* getSuccessor(TreeNode<T>* d);
   bool deleteRec();
@@ -158,4 +158,87 @@ void BST<T>::fileTree()
 //   }
 // }
 
-#endif
+
+template <class T>
+bool BST<T>::removeNode(int k){
+    if(isEmpty()) //root == NUL
+      return false;
+
+    //invoke search to determine where exist or not
+
+    TreeNode *parent = NULL;
+    TreeNode *current = root;
+    bool isLeftNode = true;
+
+    while(current->key != k){
+      parent = current;
+
+      if(k < current->key){
+        isLeftNode = true;
+        current = current->left;
+      }
+      else{
+        isLeftNode = false;
+        current = current->right;
+      }
+
+      if(current == NULL)
+        return false;
+    }
+
+    //at this point we have found our key/value, now we can proceed to deleting this node
+
+    //case: node to be deleted does not have children, AKA a leaf node
+    if(current->left == NULL && current->right == NULL){
+        if(current == root)
+          root = NULL;
+        else if(ifLeftNode){
+          parent->left = NULL;
+        }
+        else{
+          parent->right = NULL;
+        }
+    }
+    //case: node to be deleted has 1 child, need to determine which side node is on
+    else if(current->right == NULL){
+      //does not have a right children, must have left child
+      if(current == root)
+          root = current->left
+      else if(isLeftNode){
+          parent-left = current->left;
+      }
+      else{
+          //node to be deleted is a right child
+          parent->right = current->left;
+      }
+
+      //case: node to be deleted has 1 child, need to determine which side node is on
+      else if(current->left == NULL){
+        //does not have a right children, must have left child
+        if(current == root)
+            root = current->right
+        else if(isLeftNode){
+            parent-left = current->right;
+        }
+        else{
+            //node to be deleted is a right child
+            parent->right = current->right;
+        }
+
+        else{
+            //the node to be deleted has two children, at this point we begin to cry
+            //we have to find the successor
+
+            TreeNode *successor = getSuccessor(current);
+
+            if(current == root)
+              root = successor;
+            else if(isLeftNode){
+              parent->left = successor;
+            }
+            else{
+              parent->right = successor;
+            }
+            successor->left = current->left;
+        }
+}
