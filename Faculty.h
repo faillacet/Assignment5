@@ -9,7 +9,7 @@ using namespace std;
 class Faculty {
 private:
     int facultyID;
-    int adviseesID; //implement as list later (linked list?)
+    int adviseesID[10]; //implement as size 10 for now
     string name;
     string level;
     string department;
@@ -25,7 +25,7 @@ public:
     bool operator == (Faculty &other);
     int getID();
     void setID(int x);
-    void setAID(int x);
+    void setAID(int index, int val);
     void setName(string x);
     void setLevel(string x);
     void setDepartment(string x);

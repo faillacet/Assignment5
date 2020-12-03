@@ -3,7 +3,9 @@
 Faculty::Faculty() {
     //defaults
     facultyID = 0;
-    adviseesID = 0;
+    for (int i =0; i<=10;i++) { //set arry to 0
+        adviseesID[i] = 0;
+    } 
     name = "Default";
     level = "Default";
     department = "Default";
@@ -11,7 +13,7 @@ Faculty::Faculty() {
 
 Faculty::Faculty(int fID, int aID, string n, string l, string d) {
     facultyID = fID;
-    adviseesID = aID;
+    adviseesID[0] = aID;
     name = n;
     level = l;
     department = d;
@@ -59,8 +61,8 @@ void Faculty::setID(int x) {
     facultyID = x;
 }
 
-void Faculty::setAID(int x) {
-    adviseesID = x;
+void Faculty::setAID(int index, int val) {  //index from 0-9 (1-10)
+    adviseesID[index] = val;
 }
 
 void Faculty::setName(string x) {

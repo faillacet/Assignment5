@@ -1,7 +1,8 @@
 #include "Handler.h"
 
 Handler::Handler() {
-    // Creates the needed BSTs
+    // Gets info from the files and pushes it to the new BST
+    filesExist();
 }
 
 Handler::~Handler() {
@@ -10,7 +11,7 @@ Handler::~Handler() {
     studentTree.pushTree("studentTable");
 }
 
-void Handler::filesExist(BST<Faculty> &facultyTree) {
+void Handler::filesExist() {
     // check to see if we can open "facultyTable" and "studentTable"
     // only works if files exist in same directory as program
     ifstream facultyTable("facultyTable");
@@ -47,7 +48,7 @@ bool Handler::readFileFaculty(ifstream &fileName) {
             temp.setID(stoi(x));
         }
         else if (linecount%5 == 2) {
-            temp.setAID(stoi(x));
+            temp.setAID(0,stoi(x));
         }
         else if (linecount%5 == 3) {
             temp.setName(x);
@@ -91,7 +92,7 @@ bool Handler::readFileStudent(ifstream &fileName) {
         else if (linecount%6 == 0) {
             temp.setMajor(x);
         }
-        if (linecount%5 == 0) {
+        if (linecount%6 == 0) {
             //push entire object to BST
             studentTree.insert(temp);
         }
@@ -132,4 +133,14 @@ void Handler::displayMenu(){
   cout << " 12) Remove an advisee from a faculty member given the ids" << endl;
   cout << " 13) Rollback" << endl;
   cout << " 14) Exit" << endl;
+}
+
+void Handler::displayFaculty(int id) {
+
+}
+
+void Handler::displayStudent(int id) {
+    Student temp;
+    temp.setID(id);
+    studentTree.contains(temp);
 }

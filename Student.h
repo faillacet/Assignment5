@@ -24,6 +24,7 @@ public:
     bool operator < (Student &other);
     bool operator > (Student &other);
     bool operator == (Student &other);
+    bool operator != (Student &other);
     int getID();
     void setID(int x);
     void setAID(int x);

@@ -49,6 +49,10 @@ bool Student::operator == (Student &other) {
     return (studentID == other.studentID);
 }
 
+bool Student::operator != (Student &other) {
+    return (studentID != other.studentID);
+}
+
 int Student::getID(){
   return studentID;
 }

@@ -11,7 +11,7 @@ public:
   virtual ~BST();
   void insert(T &value);
   bool getRoot();
-  bool contains(int value);  //AKA search
+  void contains(T &value);  //AKA search
   TreeNode<T>* deleteNode(int key);   //key is ID num
 
   TreeNode<T>* getSuccessor(TreeNode<T>* d);
@@ -135,26 +135,36 @@ bool BST<T>::getRoot()
 }
 
 template <class T>
-bool BST<T>::contains(int value)
-{
-  if(isEmpty())
-    return false;
-  else  //not empty tree
-  {
-    TreeNode<T> *current = root;
-
-    while(current->data != value)
-    {
-      if(value < current->data)  //going left
-        current = current->left;
-      else
-        current = current->right;
-      if(current == NULL)   //we did not find it, DNE
-        return false;
-    }
-    cout << current->key.printInfo() << endl;
+void BST<T>::contains(T &value) {
+  if (isEmpty()) {
+    cout << "Tree Empty" << endl;
+    return;
   }
-  return true;
+  else {
+    TreeNode<T> *current = root;
+    TreeNode<T> *parent = nullptr;
+    while (current->data != value)
+    {
+      parent = current;
+      if (value < current->data) {  //going left
+        if (current->left == nullptr) {
+          cout << "Member not found" << endl;
+          return;
+        }
+        current = current->left;
+      }
+      else if (value > current->data) { //go right
+        if (current->right == nullptr) {
+          cout << "Member not found" << endl;
+          return;
+        }
+        current = current->right;
+      }
+    }
+    cout << "Member found: " << endl;
+    current->printInfo();
+  }
+  return;
 }
 
 template <class T>

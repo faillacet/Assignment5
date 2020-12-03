@@ -16,16 +16,16 @@ private:
 public:
     Handler();
     ~Handler();
-    void filesExist(BST<Faculty> &facultyTree);    //when program starts search for two stored files (BST) to see if they exist
+    void filesExist();    //when program starts search for two stored files (BST) to see if they exist
     bool readFileFaculty(ifstream &fileName);      //if the files exist, open them and push info to BST
-    bool readFileStudent(ifstream &fileName);
-    bool pushFileFaculty();
-    bool pushFileStudent();
+    bool readFileStudent(ifstream &fileName);       //UPDATE LATER TO ALLOW FOR MULTIPLE ADVISEE IDS
     void insertStudent(Student x);       //push new student to tree
     void insertFaculty(Faculty x);       //push new faculty to tree
     void displayFacultyTree();           //print Faculty tree
     void displayStudentTree();           //print Student Tree
     void displayMenu();                  //menu for user input
+    void displayFaculty(int id);
+    void displayStudent(int id);
 };
 
 #endif

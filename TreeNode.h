@@ -21,6 +21,7 @@ public:
     bool operator < (TreeNode<T> &other);
     bool operator > (TreeNode<T> &other);
     bool operator == (TreeNode<T> &other);
+    bool operator != (TreeNode<T> &other);
 };
 
 template <class T>
@@ -67,6 +68,11 @@ bool TreeNode<T>::operator > (TreeNode<T> &other) {
 template <class T>
 bool TreeNode<T>::operator == (TreeNode<T> &other) {
     return (*data == other.data);
+}
+
+template <class T>
+bool TreeNode<T>::operator != (TreeNode<T> &other) {
+    return (*data != other.data);
 }
 
 #endif
