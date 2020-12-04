@@ -2,6 +2,7 @@
 #define TREENODE_H
 
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 template <class T>
@@ -16,9 +17,11 @@ public:
     TreeNode(T &d);
     ~TreeNode();
     void printInfo();   //print the data stored 
+    void pushToFile(ofstream &myFile);
     bool operator < (TreeNode<T> &other);
     bool operator > (TreeNode<T> &other);
     bool operator == (TreeNode<T> &other);
+    bool operator != (TreeNode<T> &other);
 };
 
 template <class T>
@@ -48,6 +51,11 @@ void TreeNode<T>::printInfo() {
 }
 
 template <class T>
+void TreeNode<T>::pushToFile(ofstream &myFile) {
+    data.pushToFile(myFile);
+}
+
+template <class T>
 bool TreeNode<T>::operator < (TreeNode<T> &other) {
     return (*data < other.data);
 }
@@ -60,6 +68,11 @@ bool TreeNode<T>::operator > (TreeNode<T> &other) {
 template <class T>
 bool TreeNode<T>::operator == (TreeNode<T> &other) {
     return (*data == other.data);
+}
+
+template <class T>
+bool TreeNode<T>::operator != (TreeNode<T> &other) {
+    return (*data != other.data);
 }
 
 #endif
