@@ -12,6 +12,8 @@ public:
   void insert(T &value);
   bool getRoot();
   void contains(T &value);  //AKA search
+  bool preSearch(T &value); //used to prevent segmentation fault
+  TreeNode<T>* search(T &value);
   bool removeNode(T &key);   //key is ID num
   bool deleteNode(T &key);
   TreeNode<T>* minimumKey(TreeNode<T>* curr);
@@ -164,6 +166,71 @@ void BST<T>::contains(T &value) {
     current->printInfo();
   }
   return;
+}
+
+template <class T>
+bool BST<T>::preSearch(T &value) {
+  if (isEmpty()) {
+    return false;
+  }
+  if (isEmpty()) {
+    cout << "Tree Empty" << endl;
+    return false;
+  }
+  else {
+    TreeNode<T> *current = root;
+    TreeNode<T> *parent = nullptr;
+    while (current->data != value)
+    {
+      parent = current;
+      if (value < current->data) {  //going left
+        if (current->left == nullptr) {
+          cout << "Member not found" << endl;
+          return false;
+        }
+        current = current->left;
+      }
+      else if (value > current->data) { //go right
+        if (current->right == nullptr) {
+          cout << "Member not found" << endl;
+          return false;
+        }
+        current = current->right;
+      }
+    }
+    return true;
+  }
+}
+
+template <class T>
+TreeNode<T>* BST<T>::search(T &value) {
+  if (isEmpty()) {
+    cout << "Tree Empty" << endl;
+    return nullptr;
+  }
+  else {
+    TreeNode<T> *current = root;
+    TreeNode<T> *parent = nullptr;
+    while (current->data != value)
+    {
+      parent = current;
+      if (value < current->data) {  //going left
+        if (current->left == nullptr) {
+          cout << "Member not found" << endl;
+          return nullptr;
+        }
+        current = current->left;
+      }
+      else if (value > current->data) { //go right
+        if (current->right == nullptr) {
+          cout << "Member not found" << endl;
+          return nullptr;
+        }
+        current = current->right;
+      }
+    }
+    return current;
+  }
 }
 
 template <class T>

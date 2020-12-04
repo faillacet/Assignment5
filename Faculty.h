@@ -23,6 +23,7 @@ public:
     bool operator < (Faculty &other);
     bool operator > (Faculty &other);
     bool operator == (Faculty &other);
+    bool operator != (Faculty &other);
     int getID();
     void setID(int x);
     void setAID(int index, int val);

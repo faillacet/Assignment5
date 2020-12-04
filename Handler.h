@@ -7,12 +7,15 @@
 #include "Student.h"
 #include "Faculty.h"
 #include "BST.h"
+#include "GenStack.h"
+#include "BothObjects.h"
 using namespace std;
 
 class Handler {
 private:
     BST<Faculty> facultyTree;
     BST<Student> studentTree;
+    GenStack<BothObjects> stack;
 public:
     Handler();
     ~Handler();
@@ -30,6 +33,10 @@ public:
     void displayStudent(int id);         //display studnt info given id
     void deleteFaculty(int id);          //delete faculty given id
     void deleteStudent(int id);          //detlete student given id
+    void undoLastCommand();              //implementation of rollback
+
+    // menu oriented functions
+    void getMenuInput(int x);
 };
 
 #endif

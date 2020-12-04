@@ -53,6 +53,10 @@ bool Faculty::operator == (Faculty &other) {
     return (facultyID < other.facultyID);
 }
 
+bool Faculty::operator != (Faculty &other) {
+    return (facultyID != other.facultyID);
+}
+
 int Faculty::getID() {
     return facultyID;
 }

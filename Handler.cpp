@@ -168,7 +168,9 @@ void Handler::displayMenu(){
 }
 
 void Handler::displayFaculty(int id) {
-
+    Faculty temp;
+    temp.setID(id);
+    facultyTree.contains(temp);
 }
 
 void Handler::displayStudent(int id) {
@@ -178,18 +180,78 @@ void Handler::displayStudent(int id) {
 }
 
 void Handler::deleteFaculty(int id) {
+    bool result;
+    Faculty temp;
+    temp.setID(id);
 
+    //rollback
+    if (facultyTree.preSearch(temp)) {
+        TreeNode<Faculty> *tempPTR;
+        tempPTR = facultyTree.search(temp);
+        BothObjects rollback(tempPTR->data, 0);
+        stack.push(rollback);
+    }
+    //end rollback
+
+    result =facultyTree.deleteNode(temp);
+    if (result) {
+        cout << "Faculty with ID " << id << " sucessfully deleted." <<endl;
+    }
+    else {
+        cout << "Could not delete Faculty!" <<endl;
+    }
 }
 
 void Handler::deleteStudent(int id) {
     bool result;
     Student temp;
     temp.setID(id);
+
+    //rollback
+    if (studentTree.preSearch(temp)) {
+        TreeNode<Student> *tempPTR;
+        tempPTR = studentTree.search(temp);
+        BothObjects rollback(tempPTR->data, 0);
+        stack.push(rollback);
+    }
+    //end rollback
+
     result = studentTree.deleteNode(temp);
-    if (result == true) {
+    if (result) {
         cout << "Student with ID " << id << " sucessfully delted."  <<endl;
     }
     else {
         cout << "Could not delete Student!" << endl;
     }
+}
+
+void Handler::undoLastCommand() {
+    if (stack.isEmpty()) {
+        cout << "No commands have been issued in this instance" << endl;
+        return;
+    }
+    BothObjects temp = stack.pop();
+    if (temp.member == 0) {         //faculty
+        if (temp.command == 0) {    //was deleted, now insert
+            facultyTree.insert(temp.facultyMember);
+        }
+        else {                      //was inserted, now delete
+            facultyTree.deleteNode(temp.facultyMember);
+        }
+    }
+    else {                          //student
+        if (temp.command == 0) {    //was deleted, now insert
+            studentTree.insert(temp.studentMember);
+        }
+        else {                      //was inserted, now delete
+            studentTree.deleteNode(temp.studentMember);
+        }
+    }
+    cout << "Last Command Sucessfully Undone" << endl;
+}
+
+void Handler::getMenuInput(int x) {
+    cout << "Enter Input 1-14: ";
+    cin >> x;
+
 }
