@@ -62,8 +62,14 @@ void RunProgram::menuSelection(int menuSel){
       masterFaculty.contains(searchID);
       break;
     case 5: //print a faculty's info from student id
-      cout << "Enter the Student ID: " << endl;
-      break;
+      //cout << "Enter the Student ID: " << endl;
+      //cin >> studentID;
+      //if (masterStudent.contains(studentID))
+      //{
+      //  showFaculty(masterStudent.search(t)->getAdvisorID());
+      facultyStudentID();
+
+
     case 6: //print all advisee's info for a faculty
       cout << "Enter the Faculty ID: " << endl;
       break;
@@ -149,5 +155,40 @@ void RunProgram::createFacultyTableFile(){
     cout << "No Students exist at this time." << endl;
   else{
     //file open
+  }
+}
+
+void RunProgram::facultyStudentID()
+{
+  string userInput;
+  int id;
+
+  if(masterStudent.isEmpty())
+  {
+    cout << "Student does not exist" << endl;
+  }
+  else
+  {
+    cout << "Students: " << endl;
+    printTree(masterStudent.getRoot());
+
+    while(true)
+    {
+      cout << "Enter Student ID: ";
+      cin >> userInput;
+
+      if(masterStudent.contains(id))
+      {
+        Student *student = masterStudent.find(id);
+
+        masterFaculty.find(student->getFaculty())->printAllFaculty();
+        break;
+      }
+      else
+      {
+          cout << "The student ID entered was not found. Please enter a valid ID." << endl;
+      }
+    }
+
   }
 }
