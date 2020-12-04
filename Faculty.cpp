@@ -3,9 +3,8 @@
 Faculty::Faculty() {
     //defaults
     facultyID = 0;
-    for (int i =0; i<=10;i++) { //set arry to 0
-        adviseesID[i] = 0;
-    } 
+    adviseesID[0] = 0;
+    arrSize = 10;
     name = "Default";
     level = "Default";
     department = "Default";
@@ -20,7 +19,11 @@ Faculty::Faculty(int fID, int aID, string n, string l, string d) {
 }
 
 Faculty::~Faculty() {
-    //clean up
+
+}
+
+void Faculty::arrSizePlusOne() {
+
 }
 
 void Faculty::printInfo() {
@@ -59,6 +62,14 @@ bool Faculty::operator != (Faculty &other) {
 
 int Faculty::getID() {
     return facultyID;
+}
+
+int Faculty::getStudentID(int index) {
+    return adviseesID[index];
+}
+
+int Faculty::getSize() {
+    return arrSize;
 }
 
 void Faculty::setID(int x) {

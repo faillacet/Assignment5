@@ -63,6 +63,10 @@ int Student::getID(){
   return studentID;
 }
 
+int Student::getAID() {
+    return advisorID;
+}
+
 void Student::setID(int x) {
     studentID = x;
 }

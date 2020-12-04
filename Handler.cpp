@@ -9,6 +9,7 @@ Handler::~Handler() {
     //clean up  --- pushes state of all trees to files
     facultyTree.pushTree("facultyTable");
     studentTree.pushTree("studentTable");
+    cout << "Faculty and Student Trees Saved, See You Next Time!" << endl;
 }
 
 void Handler::filesExist() {
@@ -120,13 +121,13 @@ void Handler::createNewStudent() {
     cout << "Enter New Student GPA: " << endl;
     cin >> y;
     temp.setGPA(y);
-    cout << "Enter New Student Name: " << endl;
+    cout << "Enter New Student First Name: " << endl;
     cin >> z;
     temp.setName(z);
     cout << "Enter New Student Grade Level: " << endl;
     cin >> z;
     temp.setLevel(z);
-    cout << "Enter New Student Major: " << endl;
+    cout << "Enter New Student Major (Enter as one word): " << endl;
     cin >> z;
     temp.setMajor(z);
 
@@ -134,10 +135,20 @@ void Handler::createNewStudent() {
 }
 
 void Handler::insertFaculty(Faculty x) {
+    //rollback
+    BothObjects temp(x, 1);
+    stack.push(temp);
+    //end rollback
+
     facultyTree.insert(x);
 }
 
 void Handler::insertStudent(Student x) {
+    //rollback
+    BothObjects temp(x, 1);
+    stack.push(temp);
+    //end rollback
+
     studentTree.insert(x);
 }
 
@@ -192,7 +203,6 @@ void Handler::deleteFaculty(int id) {
         stack.push(rollback);
     }
     //end rollback
-
     result =facultyTree.deleteNode(temp);
     if (result) {
         cout << "Faculty with ID " << id << " sucessfully deleted." <<endl;
@@ -211,11 +221,11 @@ void Handler::deleteStudent(int id) {
     if (studentTree.preSearch(temp)) {
         TreeNode<Student> *tempPTR;
         tempPTR = studentTree.search(temp);
-        BothObjects rollback(tempPTR->data, 0);
+        Student student = tempPTR->data;
+        BothObjects rollback(student, 0);
         stack.push(rollback);
     }
     //end rollback
-
     result = studentTree.deleteNode(temp);
     if (result) {
         cout << "Student with ID " << id << " sucessfully delted."  <<endl;
@@ -250,6 +260,52 @@ void Handler::undoLastCommand() {
     cout << "Last Command Sucessfully Undone" << endl;
 }
 
+void Handler::givenSIDPrintAdvisor() {
+    int x;
+    cout << "Please enter Student ID: " << endl;
+    cin >> x;
+    Student temp;
+    TreeNode<Student> *student;
+    Faculty faculty;
+    temp.setID(x);
+    if (studentTree.preSearch(temp)) {
+        student = studentTree.search(temp);
+        x = student->data.getAID();
+        faculty.setID(x);
+        if (facultyTree.preSearch(faculty)) 
+            facultyTree.contains(faculty);
+        else
+            cout << "Advisor could not be found."  << endl;
+    }
+    else {
+        cout << "Student could not be found." << endl;
+    }
+}
+
+void Handler::givenAIDPrintStudents() {
+    int x;
+    cout << "Please enter Advisor ID: ";
+    cin >> x;
+    Faculty temp;
+    TreeNode<Faculty> *faculty;
+    temp.setID(x);
+    if (facultyTree.preSearch(temp)) {
+        faculty = facultyTree.search(temp);
+        int arr[10];
+        int counter = 0;
+        while (faculty->data.getStudentID(counter) != 0 && counter < 10) {
+            arr[counter] = faculty->data.getStudentID(counter);
+            Student student;
+            
+            counter++;
+        }
+
+    }
+    else {
+        cout << "Faculty could not be found."  << endl;
+    }
+}
+
 void Handler::runProgram() {
     bool runProgram = true;
     displayMenu();
@@ -277,7 +333,7 @@ void Handler::runProgram() {
             displayFaculty(input);
         }
         else if (x == 5) {
-
+            givenSIDPrintAdvisor();
         }
         else if (x == 6) {
 
