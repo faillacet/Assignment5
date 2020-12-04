@@ -250,8 +250,67 @@ void Handler::undoLastCommand() {
     cout << "Last Command Sucessfully Undone" << endl;
 }
 
-void Handler::getMenuInput(int x) {
-    cout << "Enter Input 1-14: ";
-    cin >> x;
+void Handler::runProgram() {
+    bool runProgram = true;
+    displayMenu();
+    while (runProgram) {
+        int x = 0;
+        cout << "Enter Input 1-14: ";
+        cin >> x;
 
+        if (x == 1) {
+            displayStudentTree();
+        }
+        else if (x == 2) {
+            displayFacultyTree();
+        }
+        else if (x == 3) {
+            int input;
+            cout << "Please Enter Student ID to find: ";
+            cin >> input;
+            displayStudent(input);
+        }
+        else if (x == 4) {
+            int input;
+            cout << "Please Enter Faculty ID to find: ";
+            cin >> input;
+            displayFaculty(input);
+        }
+        else if (x == 5) {
+
+        }
+        else if (x == 6) {
+
+        }
+        else if (x == 7) {
+            createNewStudent();
+        }
+        else if (x == 8) {
+            int input;
+            cout << "Please enter ID of student you want to delete: ";
+            cin >> input;
+            deleteStudent(input);
+        }
+        else if (x == 9) {
+            createNewFaculty();
+        }
+        else if (x == 10) {
+            int input;
+            cout << "Please enter ID of faculty you want to delete: ";
+            cin >> input;
+            deleteFaculty(input);
+        }
+        else if (x == 11) {
+
+        }
+        else if (x == 12) {
+
+        }
+        else if (x == 13) {
+            undoLastCommand();
+        }
+        else {
+            runProgram = false;
+        }
+    }
 }

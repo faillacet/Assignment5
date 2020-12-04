@@ -36,7 +36,7 @@ public:
     void undoLastCommand();              //implementation of rollback
 
     // menu oriented functions
-    void getMenuInput(int x);
+    void runProgram();
 };
 
 #endif

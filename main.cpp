@@ -9,14 +9,7 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
     Handler h;
+    h.runProgram();
     
-    Student temp(5, 5,3.0,"Dope","Freshman", "Art");
-    //h.insertStudent(temp);
-    h.deleteStudent(5);
-    h.deleteStudent(5);
-    // h.undoLastCommand();
-    h.displayStudent(5);
-
-    //h.displayStudentTree();
     return 0;
 }
