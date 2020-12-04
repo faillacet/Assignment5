@@ -58,7 +58,7 @@ void GenStack<T>::push(T data) {
         //cout << "Array is full, stack overflow." << endl;                 //functiom to let stack double in size in this case TODO
         arr = doubleSize();
     }
-    arr[++top]=data;
+    arr[++top] = data;
     //cout << data << " pushed to stack." <<endl;
 }
 

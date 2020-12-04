@@ -9,6 +9,7 @@ Handler::~Handler() {
     //clean up  --- pushes state of all trees to files
     facultyTree.pushTree("facultyTable");
     studentTree.pushTree("studentTable");
+    cout << "Faculty and Student Trees Saved, See You Next Time!" << endl;
 }
 
 void Handler::filesExist() {
@@ -16,7 +17,7 @@ void Handler::filesExist() {
     // only works if files exist in same directory as program
     ifstream facultyTable("facultyTable");
     ifstream studentTable("studentTable");
-
+	
     if (facultyTable.is_open() && studentTable.is_open()) {     //case both files exist
 
         readFileFaculty(facultyTable);
@@ -38,33 +39,52 @@ void Handler::filesExist() {
     }
 }
 
-bool Handler::readFileFaculty(ifstream &fileName) {
+bool Handler::readFileFaculty(ifstream &fileName) {             
     string x;
+    bool reset = false;
     int linecount = 1;
+    int mod = 5;
+    int numA = 0;
+    int counter = 1;
     Faculty temp;
     while (getline(fileName,x)) {
         //Organized ID, adviseeID, Name, Level, Department
-        if (linecount%5 == 1) {
+        if (reset) {
+            linecount = 1;  
+            numA = 0;
+            mod = 5;
+            counter = 1;
+            reset = false;
+        }
+        if (linecount%mod == 1) {
             temp.setID(stoi(x));
         }
-        else if (linecount%5 == 2) {
-            temp.setAID(0,stoi(x));
+        else if (linecount%mod == 2) {
+            numA = stoi(x);
+            mod += numA;
+            temp.setCount(numA);
         }
-        else if (linecount%5 == 3) {
+        else if (linecount%mod == (2+counter)  && numA != 0) {
+            temp.setAID(counter-1,stoi(x));
+            if (counter < numA)
+                counter++;
+        }
+        else if (linecount%mod == (3+counter)) {
             temp.setName(x);
         }
-        else if (linecount%5 == 4) {
+        else if (linecount%mod == (4+counter)) {
             temp.setLevel(x);
         }
-        else if (linecount%5 == 0) {
+        else if (linecount%mod == 0) {
             temp.setDepartment(x);
         }
-        if (linecount%5 == 0) {
+        if (linecount%mod == 0) {
             //push entire object to BST
             facultyTree.insert(temp);
+            reset = true;
         }
         linecount++;
-    }
+    }           
     return true;
 }
 
@@ -97,13 +117,38 @@ bool Handler::readFileStudent(ifstream &fileName) {
             studentTree.insert(temp);
         }
         linecount++;
-    }
+    }           
     return true;
 }
 
 void Handler::createNewFaculty() {
     Faculty temp;
+    string y;
+    int x;
+    int iterator;
+    cout << "Enter New Faculty ID: " << endl;
+    cin >> x;
+    temp.setID(x);
+    cout << "Enter Number Of Advisees (can be changed later): "  <<endl;
+    cin >> x;
+    temp.setCount(x);
+    iterator = x;
+    for (int i = 0; i < iterator; ++i) {
+        cout << "Enter Student ID: " << endl;
+        cin >> x;
+        temp.setAID(i,x);
+    }
+    cout << "Enter New Faculty Name (Enter as one word): " <<endl;
+    cin >> y;
+    temp.setName(y);
+    cout << "Enter New Faculty Level (Enter as one word): " <<endl;
+    cin >> y;
+    temp.setLevel(y);
+    cout << "Enter New Faculty Department (Enter as one word): " <<endl;
+    cin >>y;
+    temp.setDepartment(y);
 
+    insertFaculty(temp);
 }
 
 void Handler::createNewStudent() {
@@ -120,13 +165,13 @@ void Handler::createNewStudent() {
     cout << "Enter New Student GPA: " << endl;
     cin >> y;
     temp.setGPA(y);
-    cout << "Enter New Student Name: " << endl;
+    cout << "Enter New Student First Name: " << endl;
     cin >> z;
     temp.setName(z);
     cout << "Enter New Student Grade Level: " << endl;
     cin >> z;
     temp.setLevel(z);
-    cout << "Enter New Student Major: " << endl;
+    cout << "Enter New Student Major (Enter as one word): " << endl;
     cin >> z;
     temp.setMajor(z);
 
@@ -134,10 +179,20 @@ void Handler::createNewStudent() {
 }
 
 void Handler::insertFaculty(Faculty x) {
+    //rollback
+    BothObjects temp(x, 1);
+    stack.push(temp);
+    //end rollback
+
     facultyTree.insert(x);
 }
 
 void Handler::insertStudent(Student x) {
+    //rollback
+    BothObjects temp(x, 1);
+    stack.push(temp);
+    //end rollback
+
     studentTree.insert(x);
 }
 
@@ -192,7 +247,6 @@ void Handler::deleteFaculty(int id) {
         stack.push(rollback);
     }
     //end rollback
-
     result =facultyTree.deleteNode(temp);
     if (result) {
         cout << "Faculty with ID " << id << " sucessfully deleted." <<endl;
@@ -211,11 +265,11 @@ void Handler::deleteStudent(int id) {
     if (studentTree.preSearch(temp)) {
         TreeNode<Student> *tempPTR;
         tempPTR = studentTree.search(temp);
-        BothObjects rollback(tempPTR->data, 0);
+        Student student = tempPTR->data;
+        BothObjects rollback(student, 0);
         stack.push(rollback);
     }
     //end rollback
-
     result = studentTree.deleteNode(temp);
     if (result) {
         cout << "Student with ID " << id << " sucessfully delted."  <<endl;
@@ -250,22 +304,97 @@ void Handler::undoLastCommand() {
     cout << "Last Command Sucessfully Undone" << endl;
 }
 
-//void Handler::facultyStudentID(int id) {
-//    Student temp;
-//    if(studentTree.contains(id)) {
-//        temp = studentTree.contains(id);
+void Handler::givenSIDPrintAdvisor() {
+    int x;
+    cout << "Please enter Student ID: " << endl;
+    cin >> x;
+    Student temp;
+    TreeNode<Student> *student;
+    Faculty faculty;
+    temp.setID(x);
+    if (studentTree.preSearch(temp)) {
+        student = studentTree.search(temp);
+        x = student->data.getAID();
+        faculty.setID(x);
+        if (facultyTree.preSearch(faculty)) 
+            facultyTree.contains(faculty);
+        else
+            cout << "Advisor could not be found."  << endl;
+    }
+    else {
+        cout << "Student could not be found." << endl;
+    }
+}
 
-//        facultyTree.contains(temp->getAdvisor())->displayFaculty();
-//        break;
-//      }
-//      else {
-//          cout << "The student ID entered was not found. Please enter a valid ID." << endl;
-//      }
-//    }
+void Handler::givenAIDPrintStudents() {
+    int x;
+    cout << "Please enter Advisor ID: ";
+    cin >> x;
+    Faculty temp;
+    TreeNode<Faculty> *faculty;
+    temp.setID(x);
+    if (facultyTree.preSearch(temp)) {
+        faculty = facultyTree.search(temp);
+        int counter = 0;
+        while (faculty->data.getStudentID(counter) != 0 && counter < 10) {
+            Student student;
+            student.setID(faculty->data.getStudentID(counter));
+            if (studentTree.preSearch(student)) {
+                studentTree.contains(student);
+            }
+            else {
+                cout << "Student with ID: " << student.getID() << " could not be found." << endl;
+            }
+            counter++;
+        }
+    }
+    else {
+        cout << "Faculty could not be found."  << endl;
+    }
+}
 
-//  }
-//}
+void Handler::changeAdvisorViaStudent() {
+    int x;
+    int y;
+    cout << "Enter Student ID: " << endl;
+    cin >> x;
+    cout << "Enter New Advisor ID: " << endl;
+    cin >> y;
+    Student temp;
+    TreeNode<Student> *ptr;
+    temp.setID(x);
+    if (studentTree.preSearch(temp)) {
+        ptr = studentTree.search(temp);
+        ptr->data.setAID(y);
+    }
+    else {
+        cout << "Student Not Found." <<endl;
+    }
+}
 
+void Handler::removeAdviseeFromFaculty() {
+    int x;
+    int y;
+    cout << "Enter Faculty ID: " << endl;
+    cin >> x;
+    cout << "Enter Advisee ID to remove: " <<endl;
+    cin >> y;
+    Faculty temp;
+    TreeNode<Faculty> *ptr;
+    temp.setID(x);
+    if (facultyTree.preSearch(temp)) {
+        ptr = facultyTree.search(temp);
+        if (ptr->data.removeAdvisee(y)) {
+            cout << "Advisee With ID " << y << " Removed." << endl;
+        }
+        else {
+            cout << "Advisee could not be removed." << endl;
+        }
+    }
+    else {
+        cout << "Faculty member does not exist." <<endl;
+    }
+}
 
 void Handler::runProgram() {
     bool runProgram = true;
@@ -294,12 +423,10 @@ void Handler::runProgram() {
             displayFaculty(input);
         }
         else if (x == 5) {
-          //  cout << "Please Enter Student ID: ";
-          //  cin >> input;
-          //  facultyStudentID();
+            givenSIDPrintAdvisor();
         }
         else if (x == 6) {
-
+            givenAIDPrintStudents();
         }
         else if (x == 7) {
             createNewStudent();
@@ -320,10 +447,11 @@ void Handler::runProgram() {
             deleteFaculty(input);
         }
         else if (x == 11) {
+            changeAdvisorViaStudent();
 
         }
         else if (x == 12) {
-
+            removeAdviseeFromFaculty();
         }
         else if (x == 13) {
             undoLastCommand();
@@ -333,85 +461,3 @@ void Handler::runProgram() {
         }
     }
 }
-
-//Case 6
-cout << "Please enter Faculty ID: " << flush;
-cin >> id;
-
-if (facultyTree.cntains(id))
-{
-  for (int tempID : facultyTree.contains()->data.displayStudent())
-  {
-    if (studentTree.contains(tempID))
-    {
-      studentTree.contains()->displayFaculty();
-    }
-  }
-}
-
-//case 11
-validInput = false;
-while (!validInput) {
-  cout << "Enter the id of the student you wish to reassign:" << endl;
-  cin >> id;
-  if (!studentTree.callContains(id)) {
-    cout << "The student ID you entered was not found." << endl;
-  }
-  else {
-    validInput = true;
-  }
-}
-
-validInput = false;
-while (!validInput) {
-  cout << "Which faculty ID would you like to reassign this student too?" << endl;
-  cin >> advisorID;
-  if (!facultyTree.contains(advisorId)) {
-    cout << "Invalid input: Faculty member not found" << endl;
-  }
-  else {
-    validInput = true;
-  }
-}
-
-if(studentTree.contains()->data.getAdvisorID()! = advisorID) {
-  facultyTree.contains()->data.insertStudent(id);
-  if (facultyTreeT.contains(studentTree.contains()->data.getAdvisorID()))
-  {
-    facultyTree.contains()->data.removeStudent(id);
-  }
-  studentTree.contains()->data.insertAdvisor(advisorID);
-}
-break;
-
-
-//case 12
-validInput = false;
-
-while (!validInput) {
-  cout << "Enter ID of faculty member you would like to change:" << endl;
-  cin >> advisorID;
-  if (!facultyTree.contains(advisorID))
-  {
-    cout << "Invalid input: Faculty member not found" << endl;
-  }
-  else
-  {
-    validInput = true;
-  }
-}
-validInput = false;
-
-while (!validInput) {
-  cout << "Enter ID of the student you wish to remove:" << endl;
-  cin >> id;
-  if (!studentTree.contains(id)) {
-    cout << "Invalid input: Student not found" << endl;
-  }
-  else {
-    validInput = true;
-  }
-}
-facultyTree.contains()->data.deleteStudent(id);
-studentTree.contains()->data.deleteAdvisor();
-break;

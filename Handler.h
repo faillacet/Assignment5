@@ -34,7 +34,10 @@ public:
     void deleteFaculty(int id);          //delete faculty given id
     void deleteStudent(int id);          //detlete student given id
     void undoLastCommand();              //implementation of rollback
-  //void facultyStudentID(int id);
+    void givenSIDPrintAdvisor();         //given student ID print the advisor
+    void givenAIDPrintStudents();        //given advisor ID print the students
+    void changeAdvisorViaStudent();      //given student ID change the advisor
+    void removeAdviseeFromFaculty();     //given advisor ID and adviseee ID remove advisee
 
     // menu oriented functions
     void runProgram();

@@ -26,7 +26,7 @@ public:
     bool operator == (Student &other);
     bool operator != (Student &other);
     int getID();
-  //  int getAdvisor();
+    int getAID();
     void setID(int x);
     void setAID(int x);
     void setGPA(double x);

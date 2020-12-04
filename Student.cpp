@@ -63,16 +63,16 @@ int Student::getID(){
   return studentID;
 }
 
+int Student::getAID() {
+    return advisorID;
+}
+
 void Student::setID(int x) {
     studentID = x;
 }
 
 void Student::setAID(int x) {
     advisorID = x;
-}
-
-//int Student::getAdvisor() {
-//    return advisorID;
 }
 
 void Student::setGPA(double x) {

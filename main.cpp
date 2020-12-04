@@ -9,7 +9,6 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
     Handler h;
-    h.runProgram();
-    
+    h.runProgram();    
     return 0;
 }
